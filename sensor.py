@@ -163,18 +163,6 @@ class SDS011(object):
                 data = self._process_frame(byte + d)
                 return data
 
-
-'''def getUsbPort():
-    try:
-        with subprocess.Popen(['ls /dev/tty.usbserial*'], shell=True, stdout=subprocess.PIPE) as f:
-            usbs = f.stdout.read().decode('utf-8')
-            usbs = usbs.split('\n')
-            usbs = [usb for usb in usbs if len(usb) > 3]
-    except Exception as e:
-        print("No USB available!")
-    
-    return usbs[-1] '''  
-
 def getTime():
     return time.strftime('%x %X', time.localtime())
 
@@ -195,19 +183,15 @@ def saveToFile(filePath, dataLst):
         writer.writerow(data)
 '''
 
-port = "/dev/ttyUSB0" #getUsbPort()
+port = "/dev/ttyUSB0"
 sensor = SDS011(port)
 
-fileName = "./data/sensorData.json"
-
-
-#(pm25, pm10)
 while True:
     pm25, pm10 = sensor.query()
     currentDateTime = getTime()
     
     r = requests.post('https://street-pollution.herokuapp.com/monitor', json={"sample_datetime": currentDateTime,"pm10": pm10,"pm25": pm25})
-    #print("pm25: {}, pm10: {}".format(pm25, pm10))
-    print(r)
+   
+    print("{} | datetime: {} | pm10: {} | pm25: {}".format(r, currentDateTime, pm10, pm25))
     #go to sleep
     time.sleep(5)
