@@ -190,7 +190,7 @@ while True:
     pm25, pm10 = sensor.query()
     currentDateTime = getTime()
     
-    r = requests.post('https://street-pollution.herokuapp.com/monitor', json={"sample_datetime": currentDateTime,"pm10": pm10,"pm25": pm25})
+    r = requests.post('https://street-pollution.herokuapp.com/monitor', json={"sample_datetime": currentDateTime,"pm10": pm10,"pm25": pm25, "istest": 0})
    
     print("{} | datetime: {} | pm10: {} | pm25: {}".format(r, currentDateTime, pm10, pm25))
     #go to sleep
